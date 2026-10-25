@@ -104,6 +104,31 @@ context.properties = {
 
 ---
 
+### G. Optimización de Grabación en OBS Studio (QuickSync VA-API)
+**Archivo:** `~/.config/obs-studio/basic/profiles/<perfil>/basic.ini` *(plantilla en `configs/obs-studio/basic.ini`)*
+
+Por defecto, OBS Studio graba por CPU (**x264**), lo que en un procesador de 4 hilos (i5-4590S) satura el uso de CPU al 100% y produce tirones o pérdida de fotogramas.
+
+#### Configuración Aplicada:
+1. **Modo de salida:** Cambiado de `Sencillo` a **`Avanzado`** en la pestaña **Grabación**.
+2. **Codificador de video por Hardware:** Seleccionar **`FFmpeg VAAPI (H.264)`** (`ffmpeg_vaapi_tex`). Delega la compresión de video al chip de silicio dedicado Intel QuickSync de la gráfica integrada HD 4600.
+3. **Control de la frecuencia (Calidad):**
+   - Modo: **CQP** (Constant Quality Parameter) en lugar de CBR.
+   - Nivel de CQP: **`20` - `22`** (calidad visual idéntica al original con bordes nítidos para código/texto y mínimo peso).
+   - Intervalo de fotogramas clave: `2 s`.
+4. **Resolución y Rendimiento:**
+   - **Resolución base (lienzo):** `1600x900`
+   - **Resolución de salida:** `1600x900` (sin escalar, evitando carga innecesaria de GPU).
+   - **FPS Comunes:** `48` fps (o `30` fps para tutoriales/programación; `60` fps para juegos).
+5. **Captura Wayland y optimización visual:**
+   - Fuente de captura: **Captura de pantalla (PipeWire)** nativa de Wayland.
+   - **Desactivar vista previa en vivo:** Clic derecho sobre el lienzo de OBS y desmarcar *Habilitar vista previa* durante grabaciones largas (ahorra ~10-15% de GPU).
+
+#### Resultado:
+* **Uso de CPU:** Bajó de **90-100%** a solo **5% - 15%** mientras graba pantalla a máxima calidad.
+
+---
+
 ## 📊 3. Comandos de Verificación y Diagnóstico
 
 Para comprobar en cualquier momento que las optimizaciones siguen activas:

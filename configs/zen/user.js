@@ -9,21 +9,27 @@ user_pref("media.hardware-video-decoding.force-enabled", true);
 user_pref("media.rdd-ffmpeg.enabled", true);
 user_pref("gfx.webrender.all", true);
 
-// 2. Google Meet, Discord y YouTube: Forzar H.264 por Hardware (desactivar AV1/VP9 en CPU)
-// Esto evita que la CPU de 4 núcleos procese video en software y delega al motor QuickSync H.264
+// 2. Google Meet, Discord y WebRTC: Forzar H.264 por Hardware (desactivar VP9 en llamadas)
+// Mantiene las videollamadas fluidas en el chip QuickSync H.264 sin quemar CPU
 user_pref("media.webrtc.hw.h264.enabled", true);
 user_pref("media.navigator.mediadatadecoder_h264_enabled", true);
 user_pref("media.navigator.mediadatadecoder_vpx_enabled", false);
 user_pref("media.peerconnection.video.vp9_enabled", false);
 user_pref("media.av1.enabled", false);
-user_pref("media.mediasource.vp9.enabled", false);
 
-// 3. Juegos con WebGPU y WebGL en Intel Haswell (saltar lista de bloqueo)
+// 3. DRM y Streaming (Amazon Prime Video, Netflix, Spotify Web)
+// Activa el módulo Widevine CDM y permite MediaSource para reproducir contenido protegido
+user_pref("media.eme.enabled", true);
+user_pref("media.gmp-widevinecdm.enabled", true);
+user_pref("media.gmp-widevinecdm.visible", true);
+user_pref("media.mediasource.vp9.enabled", true);
+
+// 4. Juegos con WebGPU y WebGL en Intel Haswell (saltar lista de bloqueo)
 user_pref("dom.webgpu.enabled", true);
 user_pref("gfx.webgpu.ignore-blocklist", true);
 user_pref("webgl.force-enabled", true);
 
-// 4. Optimización de Pestañas, CPU (4 hilos) y Memoria (8 GB RAM)
+// 5. Optimización de Pestañas, CPU (4 hilos) y Memoria (8 GB RAM)
 user_pref("dom.ipc.processCount", 4);
 user_pref("dom.ipc.processCount.webIsolated", 2);
 user_pref("browser.tabs.unloadOnLowMemory", true);

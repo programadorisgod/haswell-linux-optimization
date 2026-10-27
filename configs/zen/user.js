@@ -18,11 +18,18 @@ user_pref("media.peerconnection.video.vp9_enabled", false);
 user_pref("media.av1.enabled", false);
 
 // 3. DRM y Streaming (Amazon Prime Video, Netflix, Spotify Web)
-// Activa el módulo Widevine CDM y permite MediaSource para reproducir contenido protegido
+// Activa el módulo Widevine CDM y MediaSource para contenido protegido
 user_pref("media.eme.enabled", true);
 user_pref("media.gmp-widevinecdm.enabled", true);
 user_pref("media.gmp-widevinecdm.visible", true);
+user_pref("media.gmp-widevinecdm.autoupdate", true);
+user_pref("media.gmp-provider.enabled", true);
 user_pref("media.mediasource.vp9.enabled", true);
+
+// User-Agent específico para Amazon: Amazon bloquea o congela el reproductor en navegadores Linux/Zen
+// Al identificarse como Firefox estándar en Windows para Prime Video, Amazon carga el reproductor completo
+user_pref("general.useragent.override.primevideo.com", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0");
+user_pref("general.useragent.override.amazon.com", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0");
 
 // 4. Juegos con WebGPU y WebGL en Intel Haswell (saltar lista de bloqueo)
 user_pref("dom.webgpu.enabled", true);
@@ -37,5 +44,5 @@ user_pref("network.prefetch-next", false);
 user_pref("network.dns.disablePrefetch", true);
 user_pref("network.http.speculative-parallel-limit", 0);
 
-// Mantener accesible el motor de UI para que los popups de permisos (micrófono, almacenamiento, etc.) reciban clics
+// Mantener accesible el motor de UI para que los popups de permisos reciban clics
 user_pref("accessibility.force_disabled", 0);

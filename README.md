@@ -42,22 +42,27 @@ MOZ_DRM_DEVICE=/dev/dri/renderD128
 ---
 
 ### C. Zen Browser (Navegador Principal)
-**Archivo:** `~/.config/zen/24qfbbnk.Default (release)/user.js`
+**Archivo:** `~/.config/zen/24qfbbnk.Default (release)/user.js` *(plantilla en `configs/zen/user.js`)*
 
-1. **Aceleración VA-API de Video:**
-   - `media.ffmpeg.vaapi.enabled = true`
-   - `media.hardware-video-decoding.force-enabled = true`
+1. **Aceleración VA-API de Video en GPU (Sin Forzado en DRM):**
+   - `media.ffmpeg.vaapi.enabled = true` y `media.hardware-video-decoding.enabled = true`: Activa la decodificación por hardware de la GPU Intel HD 4600.
+   - `media.hardware-video-decoding.force-enabled = false`: **Crucial para DRM.** En Linux, los drivers de VA-API no soportan descifrado de flujos protegidos. Dejarlo en `false` permite que YouTube/Meet usen VA-API en hardware, mientras que Prime Video y Netflix usan Widevine CDM sin congelarse en el botón Play.
+   - `media.rdd-ffmpeg.enabled = false` y `media.rdd-process.enabled = false`: **Crucial para estabilidad.** El proceso sandbox RDD (Remote Data Decoder) sufre un *deadlock* documentado con el driver `i965` de Haswell que congelaba la interfaz tras unos momentos de reproducción. Desactivarlo decodifica directamente sin bloqueos de UI.
    - `gfx.webrender.all = true`
 2. **Google Meet y Discord Fluidos (WebRTC por Hardware):**
-   - `media.webrtc.hw.h264.enabled = true` y `media.navigator.mediadatadecoder_h264_enabled = true` (Delega la codificación/decodificación de video al motor Intel QuickSync H.264).
-   - `media.peerconnection.video.vp9_enabled = false`, `media.av1.enabled = false` y `media.mediasource.vp9.enabled = false` (Impide que YouTube, Discord o Meet manden video en VP9/AV1 por software).
-3. **WebGPU y WebGL:**
-   - `dom.webgpu.enabled = true` y `gfx.webgpu.ignore-blocklist = true` (Salta la lista de bloqueo de Mesa para Haswell Vulkan 1.2 y evita caer en SwiftShader por CPU).
+   - `media.webrtc.hw.h264.enabled = true` y `media.navigator.mediadatadecoder_h264_enabled = true`: Delega la codificación y decodificación de llamadas al chip QuickSync H.264 de la GPU.
+   - `media.peerconnection.video.vp9_enabled = false`: Impide que Meet o Discord fuercen VP9 por software en la CPU.
+   - `media.mediasource.vp9.enabled = true`: Mantiene activa la compatibilidad MSE para evitar que las tarjetas y vistas previas de Prime Video rompan sus scripts.
+3. **Soporte DRM Widevine (Prime Video, Netflix, Spotify Web):**
+   - `media.eme.enabled = true`
+   - `media.gmp-widevinecdm.enabled = true` y `visible = true`
+4. **WebGPU y WebGL:**
+   - `dom.webgpu.enabled = true` y `gfx.webgpu.ignore-blocklist = true`: Salta la lista de bloqueo de Mesa para Haswell Vulkan 1.2 y evita caer en SwiftShader por CPU.
    - `webgl.force-enabled = true`
-4. **Gestión Eficiente de Memoria (8 GB RAM):**
-   - `dom.ipc.processCount = 4` y `dom.ipc.processCount.webIsolated = 2` (Evita la proliferación de procesos pesados).
-   - `browser.tabs.unloadOnLowMemory = true` (Suspende pestañas inactivas automáticamente ante presión de RAM).
-   - `accessibility.force_disabled = 0` (Garantiza el correcto funcionamiento de clics en popups de permisos como micrófono/cámara).
+5. **Gestión de Memoria y UI Accesible:**
+   - `dom.ipc.processCount = 4` y `dom.ipc.processCount.webIsolated = 2`: Evita la proliferación de procesos pesados en 8 GB de RAM.
+   - `browser.tabs.unloadOnLowMemory = false`: Evita que el navegador congele o suspenda la pestaña activa de streaming.
+   - `accessibility.force_disabled = 0`: Garantiza el correcto funcionamiento de clics en popups de permisos (micrófono, cámara, almacenamiento).
 
 ---
 

@@ -6,7 +6,8 @@
 user_pref("media.ffmpeg.vaapi.enabled", true);
 user_pref("media.hardware-video-decoding.enabled", true);
 user_pref("media.hardware-video-decoding.force-enabled", false); // Permite decodificación DRM Widevine sin colgar el pipeline
-user_pref("media.rdd-ffmpeg.enabled", true);
+user_pref("media.rdd-ffmpeg.enabled", false); // Desactiva el proceso RDD para evitar deadlocks/congelamientos en Intel Haswell
+user_pref("media.rdd-process.enabled", false);
 user_pref("gfx.webrender.all", true);
 
 // 2. Google Meet y Discord: Forzar H.264 por Hardware en WebRTC
@@ -27,7 +28,7 @@ user_pref("webgl.force-enabled", true);
 // 5. Optimización de Procesos de Pestañas y Memoria (8 GB RAM / 4 núcleos)
 user_pref("dom.ipc.processCount", 4);
 user_pref("dom.ipc.processCount.webIsolated", 2);
-user_pref("browser.tabs.unloadOnLowMemory", true);
+user_pref("browser.tabs.unloadOnLowMemory", false); // Evita que la pestaña activa de streaming se congele
 
 // 6. UI y Popups accesibles (permite interacción y clics de ratón en cuadros de diálogo)
 user_pref("accessibility.force_disabled", 0);
